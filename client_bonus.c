@@ -6,7 +6,7 @@
 /*   By: lumugot <lumugot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:25:24 by lumugot           #+#    #+#             */
-/*   Updated: 2025/01/07 17:29:52 by lumugot          ###   ########.fr       */
+/*   Updated: 2025/04/11 01:07:14 by lumugot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,14 @@ int	main(int argc, char **argv)
 	int					message;
 	struct sigaction	sa;
 
+	if (argc == 1)
+	{
+		ft_putstr_fd("Write message and PID !\n", 2);
+		return (0);
+	}
 	check_arg(argc, argv);
 	pid = ft_atoi(argv[1]);
-	message = 0;
+	message = -1;
 	if (pid <= 0 || kill(pid, 0))
 	{
 		ft_putstr_fd("PID Invalid !", 2);
@@ -69,10 +74,7 @@ int	main(int argc, char **argv)
 	sa.sa_flags = 0;
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
-	while (argv[2][message])
-	{
+	while (argv[2][++message])
 		send_signal(pid, argv[2][message]);
-		message++;
-	}
 	send_signal(pid, '\0');
 }
